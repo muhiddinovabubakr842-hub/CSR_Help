@@ -23,12 +23,11 @@ jobs:
       - uses: actions/configure-pages@v5
         with:
           enablement: true
-      - name: Assemble public guest preview
+      - name: Assemble public browser editor
         run: |
           mkdir _site
           cp -R web/. _site/
-          cp web/guest.html _site/index.html
-          sed -i -e 's|href="/|href="|g' -e 's|src="/|src="|g' _site/index.html
+          sed -i 's|<html lang="ru">|<html lang="ru" data-local-app>|' _site/index.html
           touch _site/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:
