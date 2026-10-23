@@ -13,3 +13,9 @@ test('opening index as a local file presents registration on the same page',asyn
  dom.window.CSRLocalAuth={current:()=>null};dom.window.eval(await readFile('web/local-gate.js','utf8'));await new Promise(r=>setTimeout(r,0));
  const d=dom.window.document;assert(d.documentElement.classList.contains('local-entry-locked'));assert(d.getElementById('localAccountForm'));assert(d.getElementById('localEmail'));assert(d.getElementById('localConfirm'));assert.equal(dom.window.location.pathname,'/project/web/index.html');dom.window.close();
 });
+
+test('GitHub Pages static editor presents browser-local registration over HTTPS',async()=>{
+ const {JSDOM}=await import('jsdom');const dom=new JSDOM('<!doctype html><html lang="ru" data-local-app><head></head><body><main id="editor">Editor</main></body></html>',{url:'https://student.github.io/CSR_Help/',runScripts:'outside-only'});
+ dom.window.CSRLocalAuth={current:()=>null};dom.window.eval(await readFile('web/local-gate.js','utf8'));await new Promise(r=>setTimeout(r,0));
+ const d=dom.window.document;assert(d.documentElement.classList.contains('local-entry-locked'));assert(d.getElementById('localAccountForm'));assert.match(d.querySelector('.auth-note').textContent,/не синхронизируется с другими устройствами/);dom.window.close();
+});
